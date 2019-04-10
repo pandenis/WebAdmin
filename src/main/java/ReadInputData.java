@@ -1,7 +1,9 @@
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -10,32 +12,21 @@ import java.io.IOException;
 
 public class ReadInputData {
 
-    public String readExcel(String filePath, String fileName, String sheetName, int rowNumber, int cellNumber) throws IOException {
+    public String readExcel(String filePath, String fileName, int sheetNumber, int rowNumber, int cellNumber) throws IOException {
 
-        File file = new File(filePath + fileName);
+        File file = new File(filePath + "/" +fileName);
 
         FileInputStream inputStream = new FileInputStream(file);
 
-        Workbook inputWorkbook = null;
-
-        String fileExtensionName = fileName.substring(fileName.indexOf("."));
-
-        if (fileExtensionName.equals(",xlsx")) {
-            inputWorkbook = new XSSFWorkbook(inputStream);
-        }
-
-        else if (fileExtensionName.equals("xls")) {
-            inputWorkbook = new HSSFWorkbook(inputStream);
-        }
-
-        Sheet inputSheet = inputWorkbook.getSheet(sheetName);
-
-        int rowCount = inputSheet.getLastRowNum() - inputSheet.getFirstRowNum();
+        XSSFWorkbook inputWorkbook = new XSSFWorkbook(inputStream);
 
 
-        Row row;
-        row = inputSheet.getRow(rowNumber);
-        String cellValue = row.getCell(cellNumber).getStringCellValue();
+        XSSFSheet inputSheet = inputWorkbook.getSheetAt(sheetNumber);
+
+        Row row = inputSheet.getRow(rowNumber);
+        Cell cell = row.getCell(cellNumber);
+
+        String cellValue = cell.getStringCellValue();
 
         return cellValue;
     }
