@@ -3,6 +3,7 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -20,19 +21,21 @@ public class LoginPage implements TS {
 
     //Global variable
 
-    public WebDriver driver;
-    public String testURL = "https://d2ad6e0d0eehtx.cloudfront.net";
-    public String filePath = "/home/pun/Selenium";
-    public String fileName = "Input.xlsx";
+    public static WebDriver driver;
+    public static String testURL = "https://stage.cu-bx.com/LoginPage/login";
+    public static String filePath = "C:\\Temp\\Sel\\InputData";
+    public static String fileName = "Input.xlsx";
     int stepNumber = 0;
 
     ReadInputData inputData = new ReadInputData();
 
 
     @BeforeMethod
-    public void setupTest(Set cookie) {
+    public void setupTest() {
 
-        driver = new ChromeDriver();
+       driver = new ChromeDriver();
+       //driver = new FirefoxDriver();
+
        // driver.manage().window().maximize();
         driver.navigate().to(testURL);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
@@ -69,7 +72,7 @@ public class LoginPage implements TS {
         }
 
         stepNumber++;
-        WebElement elementButton = driver.findElement(By.xpath("//*[@id=\"app\"]/div/div/div[2]/div[1]/div/div/form/div[3]/button"));
+        WebElement elementButton = driver.findElement(By.xpath("//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button"));
         elementButton.click();
         System.out.println(stepNumber + ". Click button Log In");
 

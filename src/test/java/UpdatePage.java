@@ -28,13 +28,8 @@ public class UpdatePage  {
 
     ReadInputData inputData = new ReadInputData();
 
-
-
-
     @BeforeMethod
     public void setupTest() throws IOException {
-
-
 
         driver = new ChromeDriver();
         // driver.manage().window().maximize();
