@@ -17,7 +17,10 @@ public class LocationsPage {
     public static String testURL = "https://stage.cu-bx.com/LoginPage/login";
     public static String filePath = "C:\\Temp\\Sel\\InputData";
     public static String fileName = "Input.xlsx";
+
     int stepNumber = 0;
+    String xpath = null;
+    String locationName = "Location Name" + System.currentTimeMillis();
 
     ReadInputData inputData = new ReadInputData();
 
@@ -72,21 +75,21 @@ public class LocationsPage {
 
     @Test
 
-    public void CreateNewLocation() throws IOException {
+    public void Create_NewLocation() throws IOException {
 
         String title = driver.getTitle();
-        System.out.println(stepNumber + ". Page Title is " + title);
+//        System.out.println(stepNumber + ". Page Title is " + title);
         Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
 
         String uname = inputData.readExcel(filePath, fileName, 0, 0, 1);
         WebElement usernameElement = driver.findElement(By.name("email"));
         usernameElement.sendKeys(uname);
-        System.out.println(stepNumber + ". Set username");
+//        System.out.println(stepNumber + ". Set username");
 
         String psswd = inputData.readExcel(filePath, fileName, 0, 1, 1);
         WebElement passwordElement = driver.findElement(By.name("password"));
         passwordElement.sendKeys(psswd);
-        System.out.println(stepNumber + ". Set password");
+//        System.out.println(stepNumber + ". Set password");
 
         try {
             Thread.sleep(2000);
@@ -94,10 +97,10 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-        String xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button";
+        xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button";
         WebElement elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
-        System.out.println(stepNumber + ". Click button Log In");
+//        System.out.println(stepNumber + ". Click button Log In");
 
         try {
             Thread.sleep(6000);
@@ -109,19 +112,18 @@ public class LocationsPage {
         String actualString = driver.findElement(By.xpath(xpath)).getText();
         String header = "Locations ";
         Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
-        System.out.println(stepNumber + ". Page header is: " + actualString);
+//        System.out.println(stepNumber + ". Page header is: " + actualString);
 
 
-        stepNumber++;
         xpath = "/html/body/div[1]/div/div/div[2]/div[2]/div/div[1]/div[2]/button";
         WebElement elementButtonCreate = driver.findElement(By.xpath(xpath));
         elementButtonCreate.click();
-        System.out.println(stepNumber + ". Click button Log In");
+//        System.out.println(stepNumber + ". Click button Log In");
 
 
         System.out.println("Create Location");
         stepNumber++;
-        String locationName = "Location Name" + java.time.LocalDate.now();
+
         WebElement locationNameElement = driver.findElement(By.name("locationName"));
         locationNameElement.sendKeys(locationName);
         System.out.println(stepNumber + ". Set Location Name");
@@ -153,7 +155,6 @@ public class LocationsPage {
         System.out.println(stepNumber + ". Click the SAVE button");
 
         stepNumber++;
-
         driver.findElement(By.id("react-select-3-input")).clear();
         driver.findElement(By.id("react-select-3-input")).sendKeys("Israel");
         driver.findElement(By.id("react-select-3-input")).sendKeys(Keys.ENTER);
@@ -208,19 +209,35 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-        System.out.println("Read Created Location");
-        stepNumber++;
-        Assert.assertTrue(actualString.contains(locationName), "Location read assertion is failed!");
-        System.out.println(stepNumber + ". Created location is: " + locationName);
+        System.out.println("---Read Created Location--");
+    }
+        @Test
 
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        public void Read_NewLocation() {
+            stepNumber++;
+            xpath = "//*[text()='" + locationName + "']";
+            //"//*div[text()='" + locationName + "')]";
+            // "/html/body/div[1]/div/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[2]/div[5]/div/div[2]";
+            String actualString = driver.findElement(By.xpath(xpath)).getText();
+            Assert.assertTrue(actualString.contains(locationName), "Location read assertion is failed!");
+            System.out.println(stepNumber + ". Created location is: " + locationName);
+
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
+        @Test
+        public void Update_NewLocation() {
 
+        System.out.println("Update Location");
+
+        driver.findElement(By.xpath(xpath));
     }
+
+
 
     @AfterMethod
     public void teardownTest() {
