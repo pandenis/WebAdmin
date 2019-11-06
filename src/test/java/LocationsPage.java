@@ -30,11 +30,11 @@ public class LocationsPage {
         driver = new ChromeDriver();
         //driver = new FirefoxDriver();
 
-        // driver.manage().window().maximize();
+        driver.manage().window().maximize();
         driver.navigate().to(testURL);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
-
+    @Test
     public void LoginToWebAdminSite() throws IOException {
 
         String title = driver.getTitle();
@@ -56,6 +56,7 @@ public class LocationsPage {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         String xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button";
         WebElement elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
@@ -74,7 +75,6 @@ public class LocationsPage {
     }
 
     @Test
-
     public void Create_NewLocation() throws IOException {
 
         String title = driver.getTitle();

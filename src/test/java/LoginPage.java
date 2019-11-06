@@ -4,7 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.FindBy;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -21,7 +23,7 @@ public class LoginPage implements TS {
 
     //Global variable
 
-    public static WebDriver driver;
+    protected static WebDriver driver;
     public static String testURL = "https://stage.cu-bx.com/LoginPage/login";
     public static String filePath = "C:\\Temp\\Sel\\InputData";
     public static String fileName = "Input.xlsx";
@@ -29,42 +31,49 @@ public class LoginPage implements TS {
 
     ReadInputData inputData = new ReadInputData();
 
+    @FindBy(xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button")
+    private WebElement loginButton;
 
     @BeforeMethod
-    public void setupTest() {
+    public static void setupTest() {
 
        driver = new ChromeDriver();
        //driver = new FirefoxDriver();
 
-       // driver.manage().window().maximize();
+        driver.manage().window().maximize();
         driver.navigate().to(testURL);
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
 
-    /*@Test
-    public void launchPage () {
-
-    }*/
     @Test
-    public void LoginToWebAdminSite() throws IOException {
-
-        stepNumber++;
+    public void assertPageTitle() {
+    stepNumber++;
         String title = driver.getTitle();
         System.out.println(stepNumber + ". Page Title is " + title);
         Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
+    }
 
+    @Test
+    public void enterUsername() throws IOException {
         stepNumber++;
         String uname = inputData.readExcel(filePath, fileName, 0, 0, 1);
         WebElement usernameElement = driver.findElement(By.name("email"));
         usernameElement.sendKeys(uname);
         System.out.println(stepNumber + ". Set username");
+    }
 
+    @Test
+    public void enterPassword() throws IOException {
         stepNumber++;
         String psswd = inputData.readExcel(filePath, fileName, 0, 1, 1);
         WebElement passwordElement = driver.findElement(By.name("password"));
         passwordElement.sendKeys(psswd);
         System.out.println(stepNumber + ". Set password");
+    }
 
+
+    @Test
+    public void clickLogInButton() throws IOException {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
@@ -72,8 +81,7 @@ public class LoginPage implements TS {
         }
 
         stepNumber++;
-        WebElement elementButton = driver.findElement(By.xpath("//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button"));
-        elementButton.click();
+        loginButton.click();
         System.out.println(stepNumber + ". Click button Log In");
 
         try {
@@ -81,6 +89,14 @@ public class LoginPage implements TS {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+
+
+
+
+
+
 
         stepNumber++;
         String actualString = driver.findElement(By.xpath("/html/body/div/div/div/div[2]/div[2]/div/div[1]/div[1]")).getText();
@@ -94,7 +110,10 @@ public class LoginPage implements TS {
     }
 
 
-    @AfterMethod
+    @AfterClass
+    public void cleanUp(){
+        driver.manage().deleteAllCookies();
+    }
     public void teardownTest() {
         driver.close();
     }
