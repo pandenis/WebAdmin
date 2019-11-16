@@ -16,19 +16,24 @@ public class ReadInputData {
 
         File file = new File(filePath + "/" +fileName);
 
-        FileInputStream inputStream = new FileInputStream(file);
+        if (file.exists()) {
 
-        XSSFWorkbook inputWorkbook = new XSSFWorkbook(inputStream);
+            FileInputStream inputStream = new FileInputStream(file);
+
+            XSSFWorkbook inputWorkbook = new XSSFWorkbook(inputStream);
 
 
-        XSSFSheet inputSheet = inputWorkbook.getSheetAt(sheetNumber);
+            XSSFSheet inputSheet = inputWorkbook.getSheetAt(sheetNumber);
 
-        Row row = inputSheet.getRow(rowNumber);
-        Cell cell = row.getCell(cellNumber);
+            Row row = inputSheet.getRow(rowNumber);
+            Cell cell = row.getCell(cellNumber);
 
-        String cellValue = cell.getStringCellValue();
+            String cellValue = cell.getStringCellValue();
 
-        return cellValue;
+            return cellValue;
+        } else {
+            return "file is not exist";
+        }
     }
 
 }
