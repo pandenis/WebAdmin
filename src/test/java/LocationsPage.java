@@ -3,18 +3,18 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class LocationsPage {
-    public static WebDriver driver;
-    public static String testURL = "https://stage.cu-bx.com/LoginPage/login";
+
+    public WebDriver driver;
+
     public static String filePath = "C:\\Temp\\Sel\\InputData";
     public static String fileName = "Input.xlsx";
 
@@ -22,31 +22,33 @@ public class LocationsPage {
     String xpath = null;
     String locationName = "Location Name" + System.currentTimeMillis();
 
-    ReadInputData inputData = new ReadInputData();
+    InputData inputData = new InputData();
+    ReadInputData readInputData = new ReadInputData();
 
     @BeforeMethod
     public void setupTest() {
 
-        driver = new ChromeDriver();
         //driver = new FirefoxDriver();
-
+        driver = new ChromeDriver();
         driver.manage().window().maximize();
-        driver.navigate().to(testURL);
+        driver.navigate().to(inputData.getTestURL());
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
     }
+
     @Test
+
     public void LoginToWebAdminSite() throws IOException {
 
         String title = driver.getTitle();
-        System.out.println(stepNumber + ". Page Title is " + title);
+        System.out.println("Page Title is " + title);
         Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
 
-        String uname = inputData.readExcel(filePath, fileName, 0, 0, 1);
+        String uname = readInputData.readExcel(filePath, fileName, 0, 0, 1);
         WebElement usernameElement = driver.findElement(By.name("email"));
         usernameElement.sendKeys(uname);
         System.out.println(stepNumber + ". Set username");
 
-        String psswd = inputData.readExcel(filePath, fileName, 0, 1, 1);
+        String psswd = readInputData.readExcel(filePath, fileName, 0, 1, 1);
         WebElement passwordElement = driver.findElement(By.name("password"));
         passwordElement.sendKeys(psswd);
         System.out.println(stepNumber + ". Set password");
@@ -76,17 +78,19 @@ public class LocationsPage {
 
     @Test
     public void Create_NewLocation() throws IOException {
+        WebElement elementButton;
+/*
 
-        String title = driver.getTitle();
+                String title = driver.getTitle();
 //        System.out.println(stepNumber + ". Page Title is " + title);
         Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
 
-        String uname = inputData.readExcel(filePath, fileName, 0, 0, 1);
+        String uname = readInputData.readExcel(filePath, fileName, 0, 0, 1);
         WebElement usernameElement = driver.findElement(By.name("email"));
         usernameElement.sendKeys(uname);
 //        System.out.println(stepNumber + ". Set username");
 
-        String psswd = inputData.readExcel(filePath, fileName, 0, 1, 1);
+        String psswd = readInputData.readExcel(filePath, fileName, 0, 1, 1);
         WebElement passwordElement = driver.findElement(By.name("password"));
         passwordElement.sendKeys(psswd);
 //        System.out.println(stepNumber + ". Set password");
@@ -119,6 +123,7 @@ public class LocationsPage {
         WebElement elementButtonCreate = driver.findElement(By.xpath(xpath));
         elementButtonCreate.click();
 //        System.out.println(stepNumber + ". Click button Log In");
+*/
 
 
         System.out.println("Create Location");
@@ -209,15 +214,13 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-        System.out.println("---Read Created Location--");
+        System.out.println("---Read Created Location---");
     }
         @Test
 
-        public void Read_NewLocation() {
+    public void Read_NewLocation() {
             stepNumber++;
             xpath = "//*[text()='" + locationName + "']";
-            //"//*div[text()='" + locationName + "')]";
-            // "/html/body/div[1]/div/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[2]/div[5]/div/div[2]";
             String actualString = driver.findElement(By.xpath(xpath)).getText();
             Assert.assertTrue(actualString.contains(locationName), "Location read assertion is failed!");
             System.out.println(stepNumber + ". Created location is: " + locationName);
@@ -232,7 +235,7 @@ public class LocationsPage {
         @Test
         public void Update_NewLocation() {
 
-        System.out.println("Update Location");
+        System.out.println("---Update Location---");
 
         driver.findElement(By.xpath(xpath));
     }
