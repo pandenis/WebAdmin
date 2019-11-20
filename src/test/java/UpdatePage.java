@@ -26,7 +26,7 @@ public class UpdatePage  {
     public String versionNumber = "4.1.2.6";
     public String groupName = "test";
 
-    ReadInputData inputData = new ReadInputData();
+    ReadInputData readInputData = new ReadInputData();
 
     @BeforeMethod
     public void setupTest() throws IOException {
@@ -42,15 +42,15 @@ public class UpdatePage  {
         Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
 
         stepNumber++;
-        String uname = inputData.readExcel(filePath, fileName, 0, 0, 1);
+        String uname = readInputData.readExcel(filePath, fileName, 0, 0, 1);
         WebElement usernameElement = driver.findElement(By.name("email"));
         usernameElement.sendKeys(uname);
         System.out.println(stepNumber + ". Set username");
 
-        stepNumber++;
-        String psswd = inputData.readExcel(filePath, fileName, 0, 1, 1);
+        String psswd = readInputData.readExcel(filePath, fileName, 0, 1, 1);
         WebElement passwordElement = driver.findElement(By.name("password"));
         passwordElement.sendKeys(psswd);
+//        System.out.println(stepNumber + ". Set password");
         System.out.println(stepNumber + ". Set password");
 
         try {

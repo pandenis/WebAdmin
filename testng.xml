@@ -2,7 +2,7 @@
 <suite name="Suite1" verbose="1" >
 <test name="WebAdmin Sanity">
 <classes>
-    <class name="LoginPage"/>
+
     <class name="LocationsPage"/>
 </classes>
 </test>

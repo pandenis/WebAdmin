@@ -20,8 +20,8 @@ public interface TS {
 
     @AfterClass
     public static void teardownTest() {
-        driver.manage().deleteAllCookies();
-        driver.close();
-
+        if (driver != null) {
+            driver.quit();
+        }
     };
 }

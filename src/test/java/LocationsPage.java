@@ -22,22 +22,19 @@ public class LocationsPage {
     String xpath = null;
     String locationName = "Location Name" + System.currentTimeMillis();
 
-    InputData inputData = new InputData();
     ReadInputData readInputData = new ReadInputData();
 
     @BeforeMethod
-    public void setupTest() {
+    public void setupTest() throws IOException {
 
         //driver = new FirefoxDriver();
+        InputData inputData = new InputData();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
         driver.navigate().to(inputData.getTestURL());
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-    }
 
-    @Test
-
-    public void LoginToWebAdminSite() throws IOException {
+        ReadInputData readInputData = new ReadInputData();
 
         String title = driver.getTitle();
         System.out.println("Page Title is " + title);
@@ -46,12 +43,12 @@ public class LocationsPage {
         String uname = readInputData.readExcel(filePath, fileName, 0, 0, 1);
         WebElement usernameElement = driver.findElement(By.name("email"));
         usernameElement.sendKeys(uname);
-        System.out.println(stepNumber + ". Set username");
+        System.out.println(". Set username");
 
         String psswd = readInputData.readExcel(filePath, fileName, 0, 1, 1);
         WebElement passwordElement = driver.findElement(By.name("password"));
         passwordElement.sendKeys(psswd);
-        System.out.println(stepNumber + ". Set password");
+        System.out.println( ". Set password");
 
         try {
             Thread.sleep(2000);
@@ -62,7 +59,7 @@ public class LocationsPage {
         String xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button";
         WebElement elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
-        System.out.println(stepNumber + ". Click button Log In");
+        System.out.println(". Click button Log In");
 
         try {
             Thread.sleep(3000);
@@ -72,8 +69,12 @@ public class LocationsPage {
         xpath = "/html/body/div/div/div/div[2]/div[2]/div/div[1]/div[1]";
         String actualString = driver.findElement(By.xpath(xpath)).getText();
         String header = "Locations ";
-        System.out.println(stepNumber + ". Page header is: " + actualString);
+        System.out.println(". Page header is: " + actualString);
         Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
+    }
+
+    public void LoginToWebAdminSite() throws IOException {
+
     }
 
     @Test
@@ -126,8 +127,14 @@ public class LocationsPage {
 */
 
 
+
+
         System.out.println("Create Location");
+
         stepNumber++;
+        xpath = "(.//*[normalize-space(text()) and normalize-space(.)='Status: All'])[1]/following::button[2]";
+        driver.findElement(By.xpath(xpath)).click();
+        System.out.println(stepNumber + ". Click the \"CREATE NEW\" button");
 
         WebElement locationNameElement = driver.findElement(By.name("locationName"));
         locationNameElement.sendKeys(locationName);
