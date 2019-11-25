@@ -24,7 +24,7 @@ public class LocationsPage {
 
     ReadInputData readInputData = new ReadInputData();
 
-    @BeforeMethod
+    @BeforeClass
     public void setupTest() throws IOException {
 
         //driver = new FirefoxDriver();
@@ -202,6 +202,7 @@ public class LocationsPage {
         elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
         System.out.println(stepNumber + ". Click the SAVE button");
+        System.out.println("Location Name is: " + locationName);
 
         try {
             Thread.sleep(1000);
@@ -221,13 +222,14 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-        System.out.println("---Read Created Location---");
+        System.out.println("n/---Read Created Location---");
     }
         @Test
 
     public void Read_NewLocation() {
             stepNumber++;
-            xpath = "//*[text()='" + locationName + "']";
+            xpath = "/html/body/div[1]/div/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[2][text()='" + locationName + "']";
+       //    xpath = "//*[text()='" + locationName + "']";
             String actualString = driver.findElement(By.xpath(xpath)).getText();
             Assert.assertTrue(actualString.contains(locationName), "Location read assertion is failed!");
             System.out.println(stepNumber + ". Created location is: " + locationName);
@@ -243,13 +245,14 @@ public class LocationsPage {
         public void Update_NewLocation() {
 
         System.out.println("---Update Location---");
+        LocationPageGridElement gridElement = new LocationPageGridElement();
+        WebElement locationElement = gridElement.elementSearcher(locationName);
 
-        driver.findElement(By.xpath(xpath));
     }
 
 
 
-    @AfterMethod
+    @AfterClass
     public void teardownTest() {
         driver.close();
     }
