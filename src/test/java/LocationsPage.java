@@ -4,6 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.annotations.Test;
@@ -132,7 +135,7 @@ public class LocationsPage {
         System.out.println("Create Location");
 
         stepNumber++;
-        xpath = "(.//*[normalize-space(text()) and normalize-space(.)='Status: All'])[1]/following::button[2]";
+        xpath = "//button[text()='CREATE NEW +']";
         driver.findElement(By.xpath(xpath)).click();
         System.out.println(stepNumber + ". Click the \"CREATE NEW\" button");
 
@@ -161,7 +164,8 @@ public class LocationsPage {
         }
 
         stepNumber++;
-        xpath = "(.//*[normalize-space(text()) and normalize-space(.)='e.g: Purpose of institute, How to locate it, Additional details about this location and etc.'])[1]/following::div[2]";
+
+        xpath = "(//div[text()='SAVE'])";
         elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
         System.out.println(stepNumber + ". Click the SAVE button");
@@ -197,12 +201,18 @@ public class LocationsPage {
         driver.findElement(By.name(name)).sendKeys("address");
         System.out.println(stepNumber + ". Set Address - Address");
 
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
         stepNumber++;
         xpath = "(.//*[normalize-space(text()) and normalize-space(.)='*Required'])[6]/following::div[2]";
+        String className = "genericFormFooter-SaveButton-enabled";
+//        elementButton = driver.findElement(By.className(className));
         elementButton = driver.findElement(By.xpath(xpath));
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         elementButton.click();
         System.out.println(stepNumber + ". Click the SAVE button");
-        System.out.println("Location Name is: " + locationName);
+
+
 
         try {
             Thread.sleep(1000);
@@ -211,10 +221,14 @@ public class LocationsPage {
         }
 
         stepNumber++;
-        xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div/div/div[1]/button";
+
+        xpath = "//button[text()='CREATE']";
         elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
         System.out.println(stepNumber + ". Click the CREATE button");
+        System.out.println("Location Name is: " + locationName + ". Created!");
+
+
 
         try {
             Thread.sleep(1000);
@@ -228,7 +242,7 @@ public class LocationsPage {
 
     public void Read_NewLocation() {
             stepNumber++;
-            xpath = "/html/body/div[1]/div/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[2][text()='" + locationName + "']";
+            xpath = "//div[contains(@class,'rt-td') and contains(text(),'" + locationName + "')]";
        //    xpath = "//*[text()='" + locationName + "']";
             String actualString = driver.findElement(By.xpath(xpath)).getText();
             Assert.assertTrue(actualString.contains(locationName), "Location read assertion is failed!");
@@ -245,8 +259,10 @@ public class LocationsPage {
         public void Update_NewLocation() {
 
         System.out.println("---Update Location---");
-        LocationPageGridElement gridElement = new LocationPageGridElement();
-        WebElement locationElement = gridElement.elementSearcher(locationName);
+
+        LocationPageGridElement pageGridElement = new LocationPageGridElement();
+        pageGridElement.elementSearcher(locationName, driver);
+
 
     }
 

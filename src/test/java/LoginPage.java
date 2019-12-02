@@ -78,7 +78,6 @@ public class LoginPage implements TS {
         String header = "Locations ";
         System.out.println(stepNumber + ". Page header is: " + actualString);
         Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
-        Set<Cookie> allCookie = driver.manage().getCookies();
 
         //  return allCookie;
 
