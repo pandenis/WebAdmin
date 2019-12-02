@@ -76,61 +76,9 @@ public class LocationsPage {
         Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
     }
 
-    public void LoginToWebAdminSite() throws IOException {
-
-    }
-
     @Test
     public void Create_NewLocation() throws IOException {
         WebElement elementButton;
-/*
-
-                String title = driver.getTitle();
-//        System.out.println(stepNumber + ". Page Title is " + title);
-        Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
-
-        String uname = readInputData.readExcel(filePath, fileName, 0, 0, 1);
-        WebElement usernameElement = driver.findElement(By.name("email"));
-        usernameElement.sendKeys(uname);
-//        System.out.println(stepNumber + ". Set username");
-
-        String psswd = readInputData.readExcel(filePath, fileName, 0, 1, 1);
-        WebElement passwordElement = driver.findElement(By.name("password"));
-        passwordElement.sendKeys(psswd);
-//        System.out.println(stepNumber + ". Set password");
-
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button";
-        WebElement elementButton = driver.findElement(By.xpath(xpath));
-        elementButton.click();
-//        System.out.println(stepNumber + ". Click button Log In");
-
-        try {
-            Thread.sleep(6000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        xpath = "/html/body/div/div/div/div[2]/div[2]/div/div[1]/div[1]";
-        String actualString = driver.findElement(By.xpath(xpath)).getText();
-        String header = "Locations ";
-        Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
-//        System.out.println(stepNumber + ". Page header is: " + actualString);
-
-
-        xpath = "/html/body/div[1]/div/div/div[2]/div[2]/div/div[1]/div[2]/button";
-        WebElement elementButtonCreate = driver.findElement(By.xpath(xpath));
-        elementButtonCreate.click();
-//        System.out.println(stepNumber + ". Click button Log In");
-*/
-
-
-
 
         System.out.println("Create Location");
 
