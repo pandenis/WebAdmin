@@ -15,7 +15,7 @@ public class LocationPageGridElement {
 
     //find the row
     public WebElement elementSearcher (String locationName, WebDriver driver) {
-        locationName = "Location Name1574581701454";
+        //locationName = "Location Name1574581701454";
         List<WebElement> tableElements = driver.findElements(By.className("rt-tr"));
         int elementsNumber = tableElements.size();
         System.out.println("The number of elements is: " + elementsNumber);

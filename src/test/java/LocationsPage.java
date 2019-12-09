@@ -23,7 +23,7 @@ public class LocationsPage {
 
     int stepNumber = 0;
     String xpath = null;
-    String locationName = "Location Name" + System.currentTimeMillis();
+    String locationName = "A_Location Name" + System.currentTimeMillis();
 
     ReadInputData readInputData = new ReadInputData();
 
@@ -53,13 +53,9 @@ public class LocationsPage {
         passwordElement.sendKeys(psswd);
         System.out.println( ". Set password");
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
-        String xpath = "//*[@id=\"app\"]/div/div/div[2]/div[2]/div[1]/div/div/form/div[3]/button";
+        String xpath = "//button[text()='LOG IN']";
         WebElement elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
         System.out.println(". Click button Log In");
@@ -69,9 +65,9 @@ public class LocationsPage {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        xpath = "/html/body/div/div/div/div[2]/div[2]/div/div[1]/div[1]";
+        xpath = "//div[@class='breadCrumbs-Wrapper']//a[1]";
         String actualString = driver.findElement(By.xpath(xpath)).getText();
-        String header = "Locations ";
+        String header = "Locations";
         System.out.println(". Page header is: " + actualString);
         Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
     }
@@ -116,7 +112,7 @@ public class LocationsPage {
         xpath = "(//div[text()='SAVE'])";
         elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
-        System.out.println(stepNumber + ". Click the SAVE button");
+        System.out.println(stepNumber + ". Click the \"SAVE\" button");
 
         stepNumber++;
         driver.findElement(By.id("react-select-3-input")).clear();
@@ -158,7 +154,7 @@ public class LocationsPage {
         elementButton = driver.findElement(By.xpath(xpath));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         elementButton.click();
-        System.out.println(stepNumber + ". Click the SAVE button");
+        System.out.println(stepNumber + ". Click the \"SAVE\" button");
 
 
 
@@ -173,7 +169,7 @@ public class LocationsPage {
         xpath = "//button[text()='CREATE']";
         elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
-        System.out.println(stepNumber + ". Click the CREATE button");
+        System.out.println(stepNumber + ". Click the \"CREATE\" button");
         System.out.println("Location Name is: " + locationName + ". Created!");
 
 
@@ -184,7 +180,7 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-        System.out.println("n/---Read Created Location---");
+        System.out.println("\n---Read Created Location---");
     }
         @Test
 
@@ -206,7 +202,7 @@ public class LocationsPage {
         @Test
         public void Update_NewLocation() {
 
-        System.out.println("---Update Location---");
+        System.out.println("\n---Update Location---");
 
         LocationPageGridElement pageGridElement = new LocationPageGridElement();
         pageGridElement.elementSearcher(locationName, driver);

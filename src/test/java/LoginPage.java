@@ -67,17 +67,24 @@ public class LoginPage implements TS {
         elementButton.click();
         System.out.println(stepNumber + ". Click button Log In");
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+
+
+
 
         stepNumber++;
-        String actualString = driver.findElement(By.xpath("/html/body/div/div/div/div[2]/div[2]/div/div[1]/div[1]")).getText();
-        String header = "Locations ";
-        System.out.println(stepNumber + ". Page header is: " + actualString);
-        Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
+
+        String pt = driver.getTitle();
+
+        System.out.println(pt);
+
+        String actualString = driver.findElement(By.linkText("Locations")).getText();
+        String header = "Locations";
+        if (actualString.equalsIgnoreCase(header)) {
+            System.out.println(stepNumber + ". Page header is: " + actualString);
+        } else {
+            Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
+        }
 
         //  return allCookie;
 
