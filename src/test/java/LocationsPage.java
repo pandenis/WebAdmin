@@ -207,6 +207,9 @@ public class LocationsPage {
         LocationPageGridElement pageGridElement = new LocationPageGridElement();
         pageGridElement.elementSearcher(locationName, driver);
 
+        WebElement optionMenuButtonsEdit = null;
+        xpath = "//contains(text(), 'Edit')";
+        optionMenuButtonsEdit.findElement(By.xpath(xpath)).click();
 
     }
 

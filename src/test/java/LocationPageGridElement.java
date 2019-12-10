@@ -16,12 +16,16 @@ public class LocationPageGridElement {
     //find the row
     public WebElement elementSearcher (String locationName, WebDriver driver) {
         //locationName = "Location Name1574581701454";
-        List<WebElement> tableElements = driver.findElements(By.className("rt-tr"));
+        List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
         int elementsNumber = tableElements.size();
-        System.out.println("The number of elements is: " + elementsNumber);
+        System.out.println("The number of elements is: " + elementsNumber + "\n");
         for (WebElement webElement : tableElements) {
             System.out.println(webElement.getText() + "\n");
+            if (webElement.getText().contains(locationName)) {
+                webElement.findElement(By.className("Table-optionDotsButton")).click();
+            }
         }
+
 
 
 
