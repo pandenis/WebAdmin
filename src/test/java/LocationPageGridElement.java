@@ -8,27 +8,35 @@ public class LocationPageGridElement {
 
     //Create Interface
     String rootXpath = "/html/body/div[1]/div/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[2]";
+    WebElement row = null;
 
     //find the locations grid
 
 //    WebElement table = driver.findElement(By.xpath(rootXpath));
 
     //find the row
-    public WebElement elementSearcher (String locationName, WebDriver driver) {
+    public void elementSearcher (String locationName, WebDriver driver) {
         //locationName = "Location Name1574581701454";
         List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
         int elementsNumber = tableElements.size();
         System.out.println("The number of elements is: " + elementsNumber + "\n");
+
         for (WebElement webElement : tableElements) {
-            System.out.println(webElement.getText() + "\n");
-            if (webElement.getText().contains(locationName)) {
+            String webElementText = webElement.getText();
+            System.out.println(webElementText + "\n");
+            if (webElementText.contains(locationName)) {
                 webElement.findElement(By.className("Table-optionDotsButton")).click();
+                String xpath = "//div[text()=' Edit ']";
+                WebElement optionMenuButtonsEdit = null;
+                optionMenuButtonsEdit.findElement(By.xpath(xpath)).click();
             }
+
+
         }
 
 
 
 
-        return null;
+
     }
 }

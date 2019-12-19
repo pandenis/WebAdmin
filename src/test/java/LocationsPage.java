@@ -12,6 +12,7 @@ import org.testng.annotations.*;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class LocationsPage {
@@ -150,12 +151,10 @@ public class LocationsPage {
         stepNumber++;
         xpath = "(.//*[normalize-space(text()) and normalize-space(.)='*Required'])[6]/following::div[2]";
         String className = "genericFormFooter-SaveButton-enabled";
-//        elementButton = driver.findElement(By.className(className));
         elementButton = driver.findElement(By.xpath(xpath));
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         elementButton.click();
         System.out.println(stepNumber + ". Click the \"SAVE\" button");
-
 
 
         try {
@@ -180,11 +179,12 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-        System.out.println("\n---Read Created Location---");
+
     }
         @Test
 
     public void Read_NewLocation() {
+            System.out.println("\n---Read Created Location---");
             stepNumber++;
             xpath = "//div[contains(@class,'rt-td') and contains(text(),'" + locationName + "')]";
        //    xpath = "//*[text()='" + locationName + "']";
@@ -193,7 +193,7 @@ public class LocationsPage {
             System.out.println(stepNumber + ". Created location is: " + locationName);
 
             try {
-                Thread.sleep(10000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -202,21 +202,103 @@ public class LocationsPage {
         @Test
         public void Update_NewLocation() {
 
-        System.out.println("\n---Update Location---");
+            System.out.println("\n---Update Location---");
 
-        LocationPageGridElement pageGridElement = new LocationPageGridElement();
-        pageGridElement.elementSearcher(locationName, driver);
+            WebElement elementButton;
 
-        WebElement optionMenuButtonsEdit = null;
-        xpath = "//contains(text(), 'Edit')";
-        optionMenuButtonsEdit.findElement(By.xpath(xpath)).click();
+            List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
+
+            for (WebElement webElement : tableElements) {
+                String webElementText = webElement.getText();
+                if (webElementText.contains(locationName)) {
+                    webElement.findElement(By.className("Table-optionDotsButton")).click();
+                    String xpath = "//div[text()=' Edit ']";
+                    webElement.findElement(By.xpath(xpath)).click();
+                    break;
+                }
+
+            }
+
+            stepNumber++;
+            locationName = locationName + " An Updated Location";
+            String name = "locationName";
+            WebElement locationNameElement = driver.findElement(By.name(name));
+            driver.findElement(By.name(name)).clear();
+            locationNameElement.sendKeys(locationName);
+            System.out.println(stepNumber + ". Set Location Name");
+
+            xpath = "(//div[text()='SAVE'])";
+            elementButton = driver.findElement(By.xpath(xpath));
+            elementButton.click();
+            System.out.println(stepNumber + ". Click the \"SAVE\" button");
+
+            stepNumber++;
+            xpath = "(.//*[normalize-space(text()) and normalize-space(.)='*Required'])[6]/following::div[2]";
+            elementButton = driver.findElement(By.xpath(xpath));
+            driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+            elementButton.click();
+            System.out.println(stepNumber + ". Click the \"SAVE\" button");
+
+            xpath = "//button[text()='UPDATE']";
+            elementButton = driver.findElement(By.xpath(xpath));
+            elementButton.click();
+            System.out.println(stepNumber + ". Click the \"UPDATE\" button");
+
+            List<WebElement> updatedTableElements = driver.findElements(By.className("rt-tr-group"));
+            for (WebElement webElement : updatedTableElements) {
+                String webElementText = webElement.getText();
+                if (webElementText.equals(locationName)) {
+                    System.out.println(stepNumber + ". Updated location is: " + locationName );
+                    break;
+                } else {
+                    System.out.println(stepNumber + ". Updated location not found");
+                }
+            }
+    }
+
+    @Test
+    public void Delete_NewLocation() {
+        System.out.println("\n---Delete Location---");
+
+        List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
+
+        for (WebElement webElement : tableElements) {
+            String webElementText = webElement.getText();
+            if (webElementText.contains(locationName)) {
+                webElement.findElement(By.className("Table-optionDotsButton")).click();
+                String xpath = "(//div[@class='Table-EntityOptionMenuButtonText'])[1]";
+                webElement.findElement(By.xpath(xpath)).click();
+                break;
+            }
+
+        }
+
+        List<WebElement> updatedTableElements = driver.findElements(By.className("rt-tr-group"));
+        for (WebElement webElement : updatedTableElements) {
+
+            String webElementText = webElement.getText();
+            if (!(webElementText.equals(locationName))) {
+                System.out.println(stepNumber + ". Deleted location is: " + locationName );
+                break;
+            } else {
+                System.out.println(stepNumber + ". The location was not deleted");
+            }
+        }
+
 
     }
 
 
 
     @AfterClass
+
+
     public void teardownTest() {
+        try {
+            Thread.sleep(15000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         driver.close();
     }
 }
