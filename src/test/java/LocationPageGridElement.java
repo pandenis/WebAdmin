@@ -5,38 +5,31 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class LocationPageGridElement {
+    private WebDriver driver;
+    private String elementName;
+    private String rootElement;
+    private String operatorID;
 
-    //Create Interface
-    String rootXpath = "/html/body/div[1]/div/div/div[2]/div[2]/div/div[2]/div/div/div[1]/div[2]";
-    WebElement row = null;
+    public WebElement elementFounder (WebDriver driver, String elementName, String rootElement, String operatorID) {
+        this.driver = driver;
+        this.elementName = elementName;
+        this.rootElement = rootElement;
+        this.operatorID = operatorID;
 
-    //find the locations grid
-
-//    WebElement table = driver.findElement(By.xpath(rootXpath));
-
-    //find the row
-    public void elementSearcher (String locationName, WebDriver driver) {
-        //locationName = "Location Name1574581701454";
-        List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
-        int elementsNumber = tableElements.size();
-        System.out.println("The number of elements is: " + elementsNumber + "\n");
+        List<WebElement> tableElements = driver.findElements(By.className(rootElement));
+        String webElementText;
+        WebElement foundElement = null;
 
         for (WebElement webElement : tableElements) {
-            String webElementText = webElement.getText();
-            System.out.println(webElementText + "\n");
-            if (webElementText.contains(locationName)) {
-                webElement.findElement(By.className("Table-optionDotsButton")).click();
-                String xpath = "//div[text()=' Edit ']";
-                WebElement optionMenuButtonsEdit = null;
-                optionMenuButtonsEdit.findElement(By.xpath(xpath)).click();
+            webElementText = webElement.getText();
+            if (webElementText.contains(elementName)) {
+                foundElement = webElement.findElement(By.className(operatorID));
+                break;
             }
-
-
         }
 
-
-
-
-
+        return foundElement;
     }
+
 }
+

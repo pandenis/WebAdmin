@@ -27,11 +27,11 @@ public class LocationsPage {
     String locationName = "A_Location Name" + System.currentTimeMillis();
 
     ReadInputData readInputData = new ReadInputData();
+    WebElement elementButton;
 
     @BeforeClass
     public void setupTest() throws IOException {
 
-        //driver = new FirefoxDriver();
         InputData inputData = new InputData();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -59,7 +59,7 @@ public class LocationsPage {
         String xpath = "//button[text()='LOG IN']";
         WebElement elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
-        System.out.println(". Click button Log In");
+        System.out.println(". Click button 'LOG IN'");
 
         try {
             Thread.sleep(3000);
@@ -73,17 +73,18 @@ public class LocationsPage {
         Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
     }
 
-    @Test
-    public void Create_NewLocation() throws IOException {
+    @Test(priority = 1)
+    public void Create_NewLocation() {
         WebElement elementButton;
 
-        System.out.println("Create Location");
+        System.out.println("---Create Location---");
 
         stepNumber++;
         xpath = "//button[text()='CREATE NEW +']";
         driver.findElement(By.xpath(xpath)).click();
         System.out.println(stepNumber + ". Click the \"CREATE NEW\" button");
 
+        stepNumber++;
         WebElement locationNameElement = driver.findElement(By.name("locationName"));
         locationNameElement.sendKeys(locationName);
         System.out.println(stepNumber + ". Set Location Name");
@@ -109,7 +110,6 @@ public class LocationsPage {
         }
 
         stepNumber++;
-
         xpath = "(//div[text()='SAVE'])";
         elementButton = driver.findElement(By.xpath(xpath));
         elementButton.click();
@@ -181,13 +181,11 @@ public class LocationsPage {
 
 
     }
-        @Test
-
+     @Test(priority = 2)
     public void Read_NewLocation() {
             System.out.println("\n---Read Created Location---");
             stepNumber++;
             xpath = "//div[contains(@class,'rt-td') and contains(text(),'" + locationName + "')]";
-       //    xpath = "//*[text()='" + locationName + "']";
             String actualString = driver.findElement(By.xpath(xpath)).getText();
             Assert.assertTrue(actualString.contains(locationName), "Location read assertion is failed!");
             System.out.println(stepNumber + ". Created location is: " + locationName);
@@ -199,12 +197,12 @@ public class LocationsPage {
             }
         }
 
-        @Test
-        public void Update_NewLocation() {
+    @Test(priority = 3, enabled = false)
+    public void Update_NewLocation() {
 
             System.out.println("\n---Update Location---");
 
-            WebElement elementButton;
+
 
             List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
 
@@ -230,6 +228,7 @@ public class LocationsPage {
             xpath = "(//div[text()='SAVE'])";
             elementButton = driver.findElement(By.xpath(xpath));
             elementButton.click();
+            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
             System.out.println(stepNumber + ". Click the \"SAVE\" button");
 
             stepNumber++;
@@ -237,11 +236,14 @@ public class LocationsPage {
             elementButton = driver.findElement(By.xpath(xpath));
             driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
             elementButton.click();
+            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
             System.out.println(stepNumber + ". Click the \"SAVE\" button");
 
+            stepNumber++;
             xpath = "//button[text()='UPDATE']";
             elementButton = driver.findElement(By.xpath(xpath));
             elementButton.click();
+            driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
             System.out.println(stepNumber + ". Click the \"UPDATE\" button");
 
             List<WebElement> updatedTableElements = driver.findElements(By.className("rt-tr-group"));
@@ -256,46 +258,74 @@ public class LocationsPage {
             }
     }
 
-    @Test
+    @Test(priority = 4)
     public void Delete_NewLocation() {
         System.out.println("\n---Delete Location---");
+        //Open Table-EntityOptionMenuButtonText "3 dots"
+        stepNumber++;
+        driver.manage().timeouts().implicitlyWait(12, TimeUnit.SECONDS);
 
-        List<WebElement> tableElements = driver.findElements(By.className("rt-tr-group"));
+        LocationPageGridElement gridElement = new LocationPageGridElement();
+        String rootElement = "rt-tr-group";
+        String operatorID = "Table-optionDotsButton";
+        gridElement.elementFounder(driver, locationName, rootElement, operatorID).click();
 
-        for (WebElement webElement : tableElements) {
-            String webElementText = webElement.getText();
-            if (webElementText.contains(locationName)) {
-                webElement.findElement(By.className("Table-optionDotsButton")).click();
-                String xpath = "(//div[@class='Table-EntityOptionMenuButtonText'])[1]";
-                webElement.findElement(By.xpath(xpath)).click();
-                break;
-            }
 
+        driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
+        xpath = "(//div[@class='Table-EntityOptionMenuButtonText'])[1]";
+        driver.findElement(By.xpath(xpath)).click();
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
 
-        List<WebElement> updatedTableElements = driver.findElements(By.className("rt-tr-group"));
-        for (WebElement webElement : updatedTableElements) {
+/*
+        String warningButtonText = "Are you sure you want to delete the location \"" + locationName + "\"?";
+        elementButton = driver.findElement(By.id("alert-dialog-slide-description"));
+        String actual = elementButton.getText();
+        Assert.assertTrue(warningButtonText.equals(actual), "Text Not Found!");
+*/
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        String xpath = "//span[text()='DELETE']";
+        driver.findElement(By.xpath(xpath)).click();
+        //Click delete button
 
-            String webElementText = webElement.getText();
-            if (!(webElementText.equals(locationName))) {
+        System.out.println(stepNumber + ". Click \"Delete\" in  the menu pop-up window");
+
+       //Verify that confirmation pop-up window appears
+/*        stepNumber++;
+        xpath = "//p[text()='Are you sure you want to delete the location \"" + locationName +"\"?']";
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        String text = "Are you sure you want to delete the location \"" + locationName + "\"?" ;
+        String  buttonText = driver.findElement(By.xpath(xpath)).getText();
+        Assert.assertTrue(buttonText.equals(text), "Button text not found!");
+        System.out.println(stepNumber + ". Deletion validation message are displaying!");*/
+
+
+        //Validate that entity deleted
+/*        stepNumber++;
+        List<WebElement> notDeletedTableElements = driver.findElements(By.className("rt-tr-group"));
+        for (WebElement webElement : notDeletedTableElements) {
+            webElementText = webElement.getText();
+            if (!webElementText.equals(locationName)) {
                 System.out.println(stepNumber + ". Deleted location is: " + locationName );
                 break;
             } else {
-                System.out.println(stepNumber + ". The location was not deleted");
+                System.out.println(stepNumber + ". Deleted location found");
             }
-        }
+        }*/
 
-
+        WebElement deletedGridElement = gridElement.elementFounder(driver, locationName, rootElement, operatorID);
+        Assert.assertEquals(!deletedGridElement.getText().equals(locationName), "Location" + locationName + " was deleted");
+        
     }
 
-
-
     @AfterClass
-
-
     public void teardownTest() {
         try {
-            Thread.sleep(15000);
+            Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

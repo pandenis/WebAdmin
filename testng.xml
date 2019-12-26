@@ -1,9 +1,15 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
-<suite name="Suite1" verbose="1" >
-<test name="WebAdmin Sanity">
-<classes>
+<suite name="Demo Test" verbose="1">
+    <test name="WebAdmin Sanity">
+        <groups>
+            <run>
+                <exclude name="Update_NewLocation"></exclude>
+            </run>
+        </groups>
+        <classes>
+            <class name="LoginPage"></class>
+            <class name="LocationsPage"/>
 
-    <class name="LocationsPage"/>
-</classes>
-</test>
-        </suite>
+            </classes>
+        </test>
+</suite>
