@@ -1,5 +1,4 @@
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -7,52 +6,60 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+import pages.tests.ReadInputData;
 
 import java.io.IOException;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import pages.tests.*;
 
-public class LoginPage implements TS {
+public class LoginPageTest implements TS {
     /*public static void main(String[] args) {
         String webDriverPath = "/home/pun/Selenium/driver/geckodriver";
         System.setProperty("webdriver.gecko.driver", webDriverPath);
     }*/
+    //TODO: Create method in pages.tests.ReadInputData launch the LoginPage
 
     //Global variable
 
     public WebDriver driver;
-    private static String testURL = "https://stage.cu-bx.com/LoginPage/login";
-    private static String filePath = "C:\\Temp\\Sel\\InputData";
-    private static String fileName = "Input.xlsx";
+
+    public static String filePath = "C:\\Temp\\Sel\\InputData";
+    public static String fileName = "Input.xlsx";
 
     int stepNumber = 0;
 
     ReadInputData inputData = new ReadInputData();
-
+    LoginPage loginPage = new LoginPage();
 
     @BeforeMethod
     public void setupTest() {
-
-        driver = new ChromeDriver();
-        // driver.manage().window().maximize();
-        driver.navigate().to(testURL);
-        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+       driver = loginPage.launch();
     }
 
-
     @Test
-    public void LoginToWebAdminSite() throws IOException {
+    public void AssertPageTitle() {
 
         stepNumber++;
-        String title = driver.getTitle();
-        System.out.println(stepNumber + ". Page Title is " + title);
-        Assert.assertEquals(title, "ContinUse", "Title assertion is failed!");
+        String actualTitle = driver.getTitle();
+        String expectedTitle = "ContinUse1";
 
+        SoftAssert softAssert = new SoftAssert();
+        softAssert.assertEquals(actualTitle, expectedTitle);
+        softAssert.assertAll();
+    }
+
+    @Test()
+     public void enterEmail()
+
+    {
+        driver = loginPage.setUsername();
         stepNumber++;
-        String uname = inputData.readExcel(filePath, fileName, 0, 0, 1);
-        WebElement usernameElement = driver.findElement(By.name("email"));
-        usernameElement.sendKeys(uname);
-        System.out.println(stepNumber + ". Set username");
+
+    }
+
+    @Test(dependsOnMethods="enterEmail")
+    public void test() throws IOException {
 
         stepNumber++;
         String psswd = inputData.readExcel(filePath, fileName, 0, 1, 1);
@@ -70,20 +77,18 @@ public class LoginPage implements TS {
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
 
 
-
-
         stepNumber++;
 
         String pt = driver.getTitle();
 
-        System.out.println(pt);
+ //       System.out.println(pt);
 
         String actualString = driver.findElement(By.linkText("Locations")).getText();
-        String header = "Locations";
-        if (actualString.equalsIgnoreCase(header)) {
+        String expectedHeader = "Locations";
+        if (actualString.equalsIgnoreCase(expectedHeader)) {
             System.out.println(stepNumber + ". Page header is: " + actualString);
         } else {
-            Assert.assertTrue(actualString.contains(header), "Page Header assertion is failed!");
+            Assert.assertTrue(actualString.contains(expectedHeader), "Page Header assertion is failed!");
         }
 
         //  return allCookie;

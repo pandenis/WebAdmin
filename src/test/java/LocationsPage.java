@@ -3,13 +3,10 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.annotations.Test;
+import pages.tests.ReadInputData;
 
 import java.io.IOException;
 import java.util.List;
@@ -257,6 +254,9 @@ public class LocationsPage {
                 }
             }
     }
+    LocationPageGridElement gridElement = new LocationPageGridElement();
+    String rootElement = "rt-tr-group";
+    String operatorID = "Table-optionDotsButton";
 
     @Test(priority = 4)
     public void Delete_NewLocation() {
@@ -265,15 +265,14 @@ public class LocationsPage {
         stepNumber++;
         driver.manage().timeouts().implicitlyWait(12, TimeUnit.SECONDS);
 
-        LocationPageGridElement gridElement = new LocationPageGridElement();
-        String rootElement = "rt-tr-group";
-        String operatorID = "Table-optionDotsButton";
         gridElement.elementFounder(driver, locationName, rootElement, operatorID).click();
+        System.out.println(stepNumber + ". Click 3 dots to open the Options menu");
 
-
+        stepNumber++;
         driver.manage().timeouts().implicitlyWait(6, TimeUnit.SECONDS);
         xpath = "(//div[@class='Table-EntityOptionMenuButtonText'])[1]";
         driver.findElement(By.xpath(xpath)).click();
+        System.out.println(stepNumber + ". Click \"Delete\" in the Options menu");
 
         try {
             Thread.sleep(5000);
@@ -281,46 +280,26 @@ public class LocationsPage {
             e.printStackTrace();
         }
 
-/*
-        String warningButtonText = "Are you sure you want to delete the location \"" + locationName + "\"?";
-        elementButton = driver.findElement(By.id("alert-dialog-slide-description"));
-        String actual = elementButton.getText();
-        Assert.assertTrue(warningButtonText.equals(actual), "Text Not Found!");
-*/
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         String xpath = "//span[text()='DELETE']";
         driver.findElement(By.xpath(xpath)).click();
         //Click delete button
 
-        System.out.println(stepNumber + ". Click \"Delete\" in  the menu pop-up window");
-
-       //Verify that confirmation pop-up window appears
-/*        stepNumber++;
-        xpath = "//p[text()='Are you sure you want to delete the location \"" + locationName +"\"?']";
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        String text = "Are you sure you want to delete the location \"" + locationName + "\"?" ;
-        String  buttonText = driver.findElement(By.xpath(xpath)).getText();
-        Assert.assertTrue(buttonText.equals(text), "Button text not found!");
-        System.out.println(stepNumber + ". Deletion validation message are displaying!");*/
-
-
-        //Validate that entity deleted
-/*        stepNumber++;
-        List<WebElement> notDeletedTableElements = driver.findElements(By.className("rt-tr-group"));
-        for (WebElement webElement : notDeletedTableElements) {
-            webElementText = webElement.getText();
-            if (!webElementText.equals(locationName)) {
-                System.out.println(stepNumber + ". Deleted location is: " + locationName );
-                break;
-            } else {
-                System.out.println(stepNumber + ". Deleted location found");
-            }
-        }*/
-
-        WebElement deletedGridElement = gridElement.elementFounder(driver, locationName, rootElement, operatorID);
-        Assert.assertEquals(!deletedGridElement.getText().equals(locationName), "Location" + locationName + " was deleted");
-        
+        System.out.println(stepNumber + ". Click \"Delete\" in the Alert dialog");
     }
+
+/*        @Test(priority = 5)
+        public void Validate_Deleted_Location() {
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+
+            WebElement deletedGridElement = gridElement.elementFounder(driver, locationName, rootElement, operatorID);
+            String text = deletedGridElement.getText();
+            if (text.contains(text)) {
+                Assert.assertTrue(text.contains(text), "Text not found!");
+                System.out.println("The location: " + locationName + "was deleted");
+            }
+
+        }*/
 
     @AfterClass
     public void teardownTest() {

@@ -7,9 +7,9 @@
             </run>
         </groups>
         <classes>
-            <class name="LoginPage"></class>
-            <class name="LocationsPage"/>
+            <class name="LoginPageTest"></class>
+        <!--   <class name="LocationsPage"/> -->
 
-            </classes>
-        </test>
-</suite>
+                        </classes>
+                    </test>
+            </suite>

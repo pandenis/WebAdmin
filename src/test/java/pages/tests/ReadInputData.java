@@ -1,3 +1,5 @@
+package pages.tests;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,7 +13,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class ReadInputData {
-
+    public String testURL = "https://stage.cu-bx.com";
+    public static String filePath = "C:\\Temp\\Sel\\InputData";
+    public static String fileName = "Input.xlsx";
 
     public String readExcel(String filePath, String fileName, int sheetNumber, int rowNumber, int cellNumber)  throws IOException {
 
