@@ -3,8 +3,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.*;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import pages.tests.ReadInputData;
@@ -32,12 +31,12 @@ public class LoginPageTest implements TS {
     ReadInputData inputData = new ReadInputData();
     LoginPage loginPage = new LoginPage();
 
-    @BeforeMethod
+    @BeforeClass
     public void setupTest() {
        driver = loginPage.launch();
     }
 
-    @Test
+    @Test (priority = 1)
     public void AssertPageTitle() {
 
         stepNumber++;
@@ -49,7 +48,7 @@ public class LoginPageTest implements TS {
         softAssert.assertAll();
     }
 
-    @Test()
+    @Test (priority = 2)
      public void enterEmail()
 
     {
@@ -58,7 +57,7 @@ public class LoginPageTest implements TS {
 
     }
 
-    @Test(dependsOnMethods="enterEmail")
+    @Test (priority = 3)
     public void test() throws IOException {
 
         stepNumber++;
@@ -96,8 +95,9 @@ public class LoginPageTest implements TS {
     }
 
 
-    @AfterMethod
+    @AfterClass
     public void teardownTest() {
+
         if (driver != null) {
             driver.quit();
         }
