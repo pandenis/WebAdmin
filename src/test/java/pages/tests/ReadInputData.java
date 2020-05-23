@@ -13,7 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 
 public class ReadInputData {
-    public String testURL = "https://stage.cu-bx.com";
+    public String testURL = "";
     public static String filePath = "C:\\Temp\\Sel\\InputData";
     public static String fileName = "Input.xlsx";
 
